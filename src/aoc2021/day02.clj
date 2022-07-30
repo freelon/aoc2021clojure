@@ -27,25 +27,27 @@ forward 2
 (let [coordinate (->> (string/split-lines input)
                       (map #(string/split % #" "))
                       (map make-delta-position)
-                      (reduce add-positions {:x 0 :y 0}))]
-  (* (coordinate :x) (coordinate :y)))
+                      (reduce add-positions {:x 0 :y 0}))
+      result (* (coordinate :x) (coordinate :y))]
+  (println "result part 1:" result)
+  result)
+  
 
 ;; part 2
 (defn drive [old [command value]]
   (case command
-    "down"   (update old :aim #(+ % value))
-    "up"     (update old :aim #(- % value))
-    "forward"   {:x (+ value (old :x))
-                 :y (+
-                     (*    value (old :aim))
-                     (old :y))
-                 :aim (old :aim)}))
+    "down" (update old :aim #(+ % value))
+    "up" (update old :aim #(- % value))
+    "forward" (-> old
+                  (update :x + value)
+                  (update :y + (* value (old :aim))))))
 
 
 (let [coordinate (->> (string/split-lines input)
                       (map #(string/split % #" "))
                       (map #(vec [(first %) (Long/parseLong (second %))]))
-                      (reduce drive {:x 0 :y 0 :aim 0}))]
-  (println "last coordinate: " coordinate)
-  (* (coordinate :x) (coordinate :y)))
+                      (reduce drive {:x 0 :y 0 :aim 0}))
+      result (* (coordinate :x) (coordinate :y))]
+  (println "result part 2:" result)
+  result)
 
