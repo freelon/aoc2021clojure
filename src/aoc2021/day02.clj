@@ -11,6 +11,7 @@ forward 2
 
 (def input (slurp "resources/day02.txt"))
 
+;; part 1
 (defn make-delta-position [[command value]]
   (let [v (Long/parseLong value)]
     (case command
@@ -23,13 +24,13 @@ forward 2
    :y (+ (left :y) (right :y))})
 
 
-;; part 1
 (let [coordinate (->> (string/split-lines input)
                       (map #(string/split % #" "))
                       (map make-delta-position)
                       (reduce add-positions {:x 0 :y 0}))]
   (* (coordinate :x) (coordinate :y)))
 
+;; part 2
 (defn drive [old [command value]]
   (case command
     "down"   (update old :aim #(+ % value))
@@ -41,8 +42,7 @@ forward 2
                  :aim (old :aim)}))
 
 
-;; part 2
-(let [coordinate (->> (string/split-lines test-input)
+(let [coordinate (->> (string/split-lines input)
                       (map #(string/split % #" "))
                       (map #(vec [(first %) (Long/parseLong (second %))]))
                       (reduce drive {:x 0 :y 0 :aim 0}))]
