@@ -46,5 +46,6 @@ forward 2
                       (map #(string/split % #" "))
                       (map #(vec [(first %) (Long/parseLong (second %))]))
                       (reduce drive {:x 0 :y 0 :aim 0}))]
+  (println "last coordinate: " coordinate)
   (* (coordinate :x) (coordinate :y)))
 
