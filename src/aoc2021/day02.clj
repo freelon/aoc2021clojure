@@ -19,16 +19,32 @@ forward 2
       "forward" {:x v :y 0})))
 
 (defn add-positions [left right]
-  {:x (+ (get left :x) (get right :x))
-   :y (+ (get left :y) (get right :y))})
+  {:x (+ (left :x) (right :x))
+   :y (+ (left :y) (right :y))})
 
 
 ;; part 1
-(->> (string/split-lines input)
-     (map #(string/split % #" "))
-     (map make-delta-position)
-     (reduce add-positions {:x 0 :y 0}))
-(let [foo *1]
-  (* (get foo :x) (get foo :y))) 
+(let [coordinate (->> (string/split-lines input)
+                      (map #(string/split % #" "))
+                      (map make-delta-position)
+                      (reduce add-positions {:x 0 :y 0}))]
+  (* (coordinate :x) (coordinate :y)))
 
-     
+(defn drive [old [command value]]
+  (case command
+    "down"   (update old :aim #(+ % value))
+    "up"     (update old :aim #(- % value))
+    "forward"   {:x (+ value (old :x))
+                 :y (+
+                     (*    value (old :aim))
+                     (old :y))
+                 :aim (old :aim)}))
+
+
+;; part 2
+(let [coordinate (->> (string/split-lines test-input)
+                      (map #(string/split % #" "))
+                      (map #(vec [(first %) (Long/parseLong (second %))]))
+                      (reduce drive {:x 0 :y 0 :aim 0}))]
+  (* (coordinate :x) (coordinate :y)))
+

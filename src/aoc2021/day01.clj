@@ -19,14 +19,14 @@
 (->> (string/split-lines input)
      (map #(Long/parseLong %))
      (partition 2 1)
-     (filter #(< (first %) (second %)))
+     (filter #(apply < %))
      (count))
 
 ;; part 2
 (->> (string/split-lines input)
      (map #(Long/parseLong %))
      (partition 3 1)
-     (map #(reduce + %))
+     (map #(apply + %))
      (partition 2 1)
-     (filter #(< (first %) (second %)))
+     (filter #(apply < %))
      (count))
