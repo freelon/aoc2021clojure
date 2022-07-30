@@ -15,8 +15,18 @@
 
 (def input (slurp "resources/day01.txt"))
 
+;; part 1
 (->> (string/split-lines input)
      (map #(Long/parseLong %))
+     (partition 2 1)
+     (filter #(< (first %) (second %)))
+     (count))
+
+;; part 2
+(->> (string/split-lines input)
+     (map #(Long/parseLong %))
+     (partition 3 1)
+     (map #(reduce + %))
      (partition 2 1)
      (filter #(< (first %) (second %)))
      (count))
